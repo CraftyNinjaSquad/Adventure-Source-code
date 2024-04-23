@@ -1,0 +1,109 @@
+import pygame, sceneEngine, spriteEngine, uiEngine, Config
+from Rooms import *
+
+class West_Door(spriteEngine.SuperSprite):
+    def __init__(self, scene):
+        spriteEngine.SuperSprite.__init__(self, scene)
+        self.setImage("Rooms/West_Door.gif")
+        height = self.screen.get_height()
+        self.x = 65
+        self.y = height/2
+
+class Slime(spriteEngine.SuperSprite): #Slime
+    def __init__(self, scene):
+        spriteEngine.SuperSprite.__init__(self, scene)
+        self.setImage("Rooms/Slime.gif")
+        height = self.screen.get_height()
+        width = self.screen.get_width()
+        self.x = width/2
+        self.y = height/2
+
+class Hero(spriteEngine.SuperSprite): #Player
+    def __init__(self, scene):
+        spriteEngine.SuperSprite.__init__(self, scene)
+        self.setImage("Rooms/Hero_South.gif")
+        height = self.screen.get_height()
+        width = self.screen.get_width()
+        self.x = width/2
+        self.y = height - 110
+        self.setBoundAction(self.STOP)
+
+    def checkEvents(self):
+        self.checkKeys()
+        
+    def checkKeys(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.setImage("Rooms/Hero_West.gif")
+            self.dx = -20
+        elif keys[pygame.K_RIGHT]:
+            self.setImage("Rooms/Hero_East.gif")
+            self.dx = 20
+        elif keys[pygame.K_UP]:
+            self.setImage("Rooms/Hero_North.gif")
+            self.dy = -20
+        elif keys[pygame.K_DOWN]:
+            self.setImage("Rooms/Hero_South.gif")
+            self.dy = 20
+        else:
+            self.dx = 0
+            self.dy = 0
+        self.updateVector()
+
+class Game(sceneEngine.Scene):
+    def __init__(self):
+        sceneEngine.Scene.__init__(self)
+        self.background = pygame.image.load("Rooms/Room.png")
+        self.west = West_Door(self)
+        self.east = East_Door(self)
+        self.north = North_Door(self)
+        self.hero = Hero(self)
+        self.sprites = [self.north, self.east, self.west, self.hero]
+
+    def location(self):
+        width = self.screen.get_width()
+        height = self.screen.get_height()
+        if self.hero.x > 80 and self.hero.y > height/2 - 30 and self.hero.y < height/2 +30:
+            Config.room = "South"
+
+def main():
+    game = Game()
+    game.start()
+
+if __name__ == "__main__":
+    main()
+
+self.setAngle(self.scene.ship.rotation)
+
+
+	#doors
+        self.north = sprites.North_Door(self)
+        self.south = sprites.South_Door(self)
+        self.east = sprites.East_Door(self)
+        self.west = sprites.West_Door(self)
+        self.boss_door = sprites.Boss_Door(self)
+
+	#enemy sprites
+        self.monster = sprites.Monster(self)
+        self.bosspit = sprites.Pit(self)
+        self.skeleton = sprites.Skeleton(self)
+        self.bonearrow = sprites.BoneArrow(self)
+        self.bat = sprites.Bat(self)
+        self.slime = sprites.Slime(self)
+
+	#room misc.
+        self.key1 =  sprites.Key1(self)
+        self.key2 =  sprites.Key2(self)
+        self.key3 =  sprites.Key3(self)
+        self.target = sprites.Target(self)
+        self.switch = sprites.Switch(self)
+        self.pit = sprites.Pit(self)
+
+	#Hero
+        self.hero = sprites.Hero(self)
+        self.sheild = sprites.Sheild(self)
+        self.arrow = sprites.Arrow(self)
+        self.sword = sprites.Sword(self)
+        self.bow = sprites.Bow(self)
+        self.lives = []
+        self.health = 6
